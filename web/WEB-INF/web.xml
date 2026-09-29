@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Adaptive Personalised Learning Path Recommender
+    Deployment descriptor.
+
+    Target server : Apache Tomcat 10.1 or 11 (Servlet 6.0, jakarta.servlet.*)
+
+    IF YOUR COLLEGE LAB USES TOMCAT 9, do these three things:
+      1. change every  import jakarta.servlet   to  import javax.servlet
+      2. change every  <%@ page %>  import the same way (none are used here)
+      3. replace the <web-app> tag below with the Java EE 4.0 version:
+           xmlns="http://xmlns.jcp.org/xml/ns/javaee"  version="4.0"
+
+    Servlets are mapped with @WebServlet annotations on the classes
+    themselves, so they are not repeated here.
+-->
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <display-name>Adaptive Personalised Learning Path Recommender</display-name>
+
+    <!-- First page shown when the application is opened -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- A student/teacher session expires after 30 minutes of inactivity -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <!-- Friendly error pages instead of a Tomcat stack trace -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+
+</web-app>

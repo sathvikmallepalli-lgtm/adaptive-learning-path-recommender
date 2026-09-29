@@ -1,0 +1,18 @@
+# Local configuration and generated output
+.env
+.env.*
+!.env.example
+build/
+web/WEB-INF/classes/
+web/WEB-INF/lib/*.jar
+*.class
+*.log
+
+# Editor and operating-system files
+.DS_Store
+.idea/
+.vscode/
+*.iml
+
+# Earlier local engineering notes; the submitted report is in docs/
+DEVELOPMENT_LOG.md
