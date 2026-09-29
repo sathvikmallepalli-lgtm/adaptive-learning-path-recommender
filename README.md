@@ -4,6 +4,10 @@ A rule-based Python learning course built for a Web Technologies PBL presentatio
 
 **This repository contains the source code and project report.** It is a local Java web application; the GitHub page is not a hosted copy of the running site.
 
+**Project team:** M Shreevenkat Sathvik (25WU0101168), N Siddharth (25WU0102263), and S Dhanush (25WU0101139). Second-year B.Tech CSE, Section Panthers, School of Technology, Woxsen University. Guided by Prof. Veeresh Biradar.
+
+**Report:** [View PDF](docs/PROJECT_REPORT.pdf) · [Download Word document](docs/PROJECT_REPORT.docx)
+
 ## What the MVP does
 
 - Separate student and teacher sign-in, with student registration.
@@ -98,7 +102,7 @@ The login page has fill buttons for Rahul and Anita. Rahul's account demonstrate
 | `web/` | JSP, CSS, JavaScript and deployment descriptor |
 | `database/` | Schema, seed scripts and data design |
 | `test/` | Rule and database transaction tests |
-| `docs/` | [Formal project report](docs/PROJECT_REPORT.md) and [Word version](docs/PROJECT_REPORT.docx) |
+| `docs/` | [Project report PDF](docs/PROJECT_REPORT.pdf), [Word version](docs/PROJECT_REPORT.docx), [Markdown source](docs/PROJECT_REPORT.md) and report figures |
 
 The request flow is browser → Servlet/filter → JavaBeans and rule engine → DAO/JDBC → MySQL → JSP response. Scoring and unlock decisions happen on the server.
 
