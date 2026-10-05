@@ -2,7 +2,9 @@
 
 A rule-based Python learning course built for a Web Technologies PBL presentation. Students study eight topics, take quizzes, receive explainable next-step advice, and unlock advanced topics through Golden Assessments. Teachers manage the course and inspect attempts and recommendations.
 
-**This repository contains the source code and project report.** It is a local Java web application; the GitHub page is not a hosted copy of the running site.
+**Live showcase:** [adaptive-learning-path-showcase.vercel.app](https://adaptive-learning-path-showcase.vercel.app). It is an interactive browser presentation of the path and recommendation rules. Simulated results stay in the visitor's browser. The complete Java/JSP/MySQL MVP in this repository runs locally with Tomcat.
+
+**This repository contains the complete source code and project report.** The Vercel showcase lives in [`showcase/`](showcase/); it does not provide live accounts, real quizzes, teacher administration or a shared database.
 
 **Project team:** M Shreevenkat Sathvik (25WU0101168), N Siddharth (25WU0102263), and S Dhanush (25WU0101139). Second-year B.Tech CSE, Section Panthers, School of Technology, Woxsen University. Guided by Prof. Veeresh Biradar.
 
@@ -103,6 +105,7 @@ The login page has fill buttons for Rahul and Anita. Rahul's account demonstrate
 | `database/` | Schema, seed scripts and data design |
 | `test/` | Rule and database transaction tests |
 | `docs/` | [Project report PDF](docs/PROJECT_REPORT.pdf), [Word version](docs/PROJECT_REPORT.docx), [Markdown source](docs/PROJECT_REPORT.md) and report figures |
+| `showcase/` | Static, interactive Vercel presentation of the learning path and Java rule thresholds |
 
 The request flow is browser → Servlet/filter → JavaBeans and rule engine → DAO/JDBC → MySQL → JSP response. Scoring and unlock decisions happen on the server.
 

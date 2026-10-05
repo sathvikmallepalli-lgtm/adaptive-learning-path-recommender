@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Explore the Adaptive Personalised Learning Path Recommender: a rule-based Python learning course built with Java, JSP, MySQL and simple web technologies."
+    />
+    <title>Adaptive Learning Path | Woxsen University PBL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a
+        class="brand"
+        href="#top"
+        aria-label="Adaptive Learning Path, top of page"
+        ><span class="brand-mark">A<span>↗</span></span
+        ><span>Adaptive<br />Learning Path</span></a
+      >
+      <nav aria-label="Main navigation">
+        <a href="#explore">Explore the path</a
+        ><a href="#how-it-works">How it works</a><a href="#project">Project</a>
+      </nav>
+      <a
+        class="header-link"
+        href="https://github.com/sathvikmallepalli-lgtm/adaptive-learning-path-recommender"
+        target="_blank"
+        rel="noopener noreferrer"
+        >View source <span aria-hidden="true">↗</span></a
+      >
+    </header>
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="hero-copy">
+          <div class="course-pill">
+            <span class="pulse"></span> A live look at our Web Technologies PBL
+          </div>
+          <h1>Every score gives you a <span>next step.</span></h1>
+          <p>
+            Learn Python through a guided path. Revise when you need to, move
+            forward when you are ready, and earn access to advanced topics.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#explore"
+              >Try the learning path <span aria-hidden="true">↘</span></a
+            ><a
+              class="button secondary"
+              href="https://github.com/sathvikmallepalli-lgtm/adaptive-learning-path-recommender/blob/main/docs/PROJECT_REPORT.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Read project report</a
+            >
+          </div>
+          <div class="hero-facts">
+            <span><strong>8</strong> Python topics</span
+            ><span><strong>200</strong> questions in the full MVP</span
+            ><span><strong>2</strong> user roles</span>
+          </div>
+        </div>
+        <div
+          class="hero-visual"
+          aria-label="Illustration of a learning path from Variables to advanced Python topics"
+        >
+          <div class="visual-top">
+            <span>YOUR PYTHON PATH</span><span>01 / 08</span>
+          </div>
+          <div class="visual-line">
+            <span class="visual-node active">01</span>
+            <div><strong>Variables</strong><small>Start here</small></div>
+            <span class="visual-check">✓</span>
+          </div>
+          <div class="visual-line">
+            <span class="visual-node">02</span>
+            <div>
+              <strong>Conditions</strong><small>Build on what you know</small>
+            </div>
+          </div>
+          <div class="visual-line dim">
+            <span class="visual-node">03</span>
+            <div><strong>Loops</strong><small>Up next</small></div>
+          </div>
+          <div class="visual-line dim">
+            <span class="visual-node">••</span>
+            <div>
+              <strong>Your path continues</strong
+              ><small>Practice · quiz · progress</small>
+            </div>
+          </div>
+          <div class="visual-note">
+            <span class="note-icon">✦</span
+            ><span>Your recommendation changes with your result.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section" id="explore">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Interactive browser showcase</p>
+            <h2>See the rules in action.</h2>
+            <p>
+              Select a topic and simulate a quiz result. The path and
+              recommendation update immediately.
+            </p>
+          </div>
+          <button class="text-button" type="button" id="reset-progress">
+            Reset demo progress ↺
+          </button>
+        </div>
+        <div class="demo-notice">
+          <strong>About this demo</strong
+          ><span
+            >This browser showcase mirrors the Java rule thresholds. It stores
+            your simulated progress only in this browser. The complete app, with
+            real questions, accounts, teacher tools and MySQL persistence, is in
+            the
+            <a
+              href="https://github.com/sathvikmallepalli-lgtm/adaptive-learning-path-recommender"
+              target="_blank"
+              rel="noopener noreferrer"
+              >source repository</a
+            >.</span
+          >
+        </div>
+        <div class="demo-grid">
+          <div class="path-panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-label">Learning path</span>
+                <h3>Python foundations → advanced</h3>
+              </div>
+              <span class="progress-count" id="progress-count"
+                >1 of 8 open</span
+              >
+            </div>
+            <div
+              class="topic-list"
+              id="topic-list"
+              aria-label="Python topics"
+            ></div>
+          </div>
+          <div class="sim-panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-label">Recommendation lab</span>
+                <h3 id="selected-title">Variables</h3>
+              </div>
+              <span class="difficulty" id="selected-difficulty">Basic</span>
+            </div>
+            <p class="selected-description" id="selected-description"></p>
+            <div class="topic-state" id="topic-state"></div>
+            <div class="score-box">
+              <label for="quiz-score">Simulate a 10-question quiz score</label>
+              <div class="score-control">
+                <input
+                  id="quiz-score"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="10"
+                  value="70"
+                /><output id="quiz-output" for="quiz-score">70%</output>
+              </div>
+              <div class="score-axis">
+                <span>0%</span><span>50% pass</span><span>Above 80% Golden</span
+                ><span>100%</span>
+              </div>
+              <button class="button primary wide" id="apply-quiz" type="button">
+                Apply quiz result
+              </button>
+            </div>
+            <div class="golden-box" id="golden-box" hidden>
+              <div>
+                <strong>Golden Assessment</strong>
+                <p>Choose how many of 5 challenging questions were correct.</p>
+              </div>
+              <div class="golden-controls">
+                <label for="golden-correct">Correct answers</label
+                ><select id="golden-correct">
+                  <option value="0">0 of 5</option>
+                  <option value="1">1 of 5</option>
+                  <option value="2">2 of 5</option>
+                  <option value="3" selected>3 of 5</option>
+                  <option value="4">4 of 5</option>
+                  <option value="5">5 of 5</option></select
+                ><button class="button dark" id="apply-golden" type="button">
+                  Apply Golden result
+                </button>
+              </div>
+            </div>
+            <div class="result" id="result" role="status" aria-live="polite">
+              <span class="result-spark">✦</span>
+              <div>
+                <strong>Start with a result</strong>
+                <p>
+                  Try 40%, 70% and 90% to see how the recommendation changes.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rules-section" id="how-it-works">
+        <div class="rules-intro">
+          <p class="section-kicker">Explainable by design</p>
+          <h2>Simple rules.<br />Personal direction.</h2>
+          <p>
+            No mystery score and no machine learning. A short set of Java
+            conditions turns quiz results into the next useful action.
+          </p>
+        </div>
+        <div class="rule-list">
+          <div class="rule-row">
+            <span class="rule-number">01</span>
+            <div>
+              <strong>Below 50%</strong>
+              <p>Read the notes, practice, and retake the quiz.</p>
+            </div>
+            <span class="rule-tag revise">Revise</span>
+          </div>
+          <div class="rule-row">
+            <span class="rule-number">02</span>
+            <div>
+              <strong>50% to 80%</strong>
+              <p>Continue to the next basic topic.</p>
+            </div>
+            <span class="rule-tag continue">Continue</span>
+          </div>
+          <div class="rule-row">
+            <span class="rule-number">03</span>
+            <div>
+              <strong>Above 80%</strong>
+              <p>Open the five-question Golden Assessment.</p>
+            </div>
+            <span class="rule-tag golden">Golden</span>
+          </div>
+          <div class="rule-row">
+            <span class="rule-number">04</span>
+            <div>
+              <strong>Golden: 60% or more</strong>
+              <p>Pass the gate that unlocks the next advanced topic.</p>
+            </div>
+            <span class="rule-tag unlock">Unlock</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="project-section" id="project">
+        <div class="project-card">
+          <div>
+            <p class="section-kicker">The complete MVP</p>
+            <h2>Built with the web technologies we study.</h2>
+            <p>
+              HTML, CSS, JavaScript and JSP shape the student and teacher pages.
+              Java Servlets handle requests, a rule engine makes explainable
+              decisions, and JDBC stores attempts and recommendations in MySQL.
+            </p>
+            <div class="tech-list">
+              <span>HTML + CSS</span><span>JavaScript</span
+              ><span>JSP + Servlets</span><span>Java</span><span>MySQL</span>
+            </div>
+            <a
+              class="button light"
+              href="https://github.com/sathvikmallepalli-lgtm/adaptive-learning-path-recommender"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Explore the full project ↗</a
+            >
+          </div>
+          <div class="flow">
+            <span>Student quiz</span><b>↓</b><span>Java rule engine</span
+            ><b>↓</b><span>Personal recommendation</span><b>↓</b
+            ><span>Learning path updates</span>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div>
+        <strong>Adaptive Personalised Learning Path Recommender</strong>
+        <p>
+          Web Technologies PBL · B.Tech CSE · School of Technology, Woxsen
+          University
+        </p>
+        <p>
+          M Shreevenkat Sathvik · N Siddharth · S Dhanush<br />Guided by Prof.
+          Veeresh Biradar
+        </p>
+      </div>
+      <div class="footer-links">
+        <a
+          href="https://github.com/sathvikmallepalli-lgtm/adaptive-learning-path-recommender"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub source ↗</a
+        ><a
+          href="https://github.com/sathvikmallepalli-lgtm/adaptive-learning-path-recommender/blob/main/docs/PROJECT_REPORT.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Project report ↗</a
+        >
+      </div>
+    </footer>
+  </body>
+</html>
