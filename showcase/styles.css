@@ -769,7 +769,38 @@ footer p {
 .footer-links a {
   text-decoration: none;
 }
+.product-jump {
+  margin: 0 max(5vw, 24px) 95px;
+  padding: 35px 40px;
+  border-radius: 17px;
+  background: #e8efff;
+  border: 1px solid #cbdcf8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+}
+.product-jump h2 {
+  font:
+    700 clamp(29px, 3vw, 43px) "Space Grotesk",
+    sans-serif;
+  letter-spacing: -0.055em;
+  margin: 0 0 8px;
+}
+.product-jump p:last-child {
+  margin: 0;
+  color: var(--muted);
+  max-width: 620px;
+  line-height: 1.55;
+}
+.product-jump .button {
+  white-space: nowrap;
+}
 @media (max-width: 900px) {
+  .product-jump {
+    align-items: flex-start;
+    flex-direction: column;
+  }
   .site-header nav {
     display: none;
   }
@@ -795,6 +826,10 @@ footer p {
   }
 }
 @media (max-width: 600px) {
+  .product-jump {
+    padding: 27px 22px;
+    margin-bottom: 55px;
+  }
   .site-header {
     height: 70px;
   }

@@ -1,0 +1,740 @@
+/* =====================================================================
+   Adaptive Personalised Learning Path Recommender
+   style.css - the project's own styles, loaded AFTER bootstrap.min.css
+
+   DESIGN RULES USED THROUGHOUT
+   1. Gold (--gold) is used for ONE thing only: the Golden Assessment.
+      Because it appears nowhere else, gold on the screen always means
+      "this is the golden path".
+   2. Scores and any other number are set in a monospace face. The subject
+      of the course is programming, so figures are treated as code.
+   3. The learning path is drawn as a real path - a vertical rail with a
+      numbered node per topic - because the order of the topics carries
+      information the student needs.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------- */
+/* 1. Design tokens                                                  */
+/* ---------------------------------------------------------------- */
+:root {
+    --ink:        #16192b;   /* sidebar and headings                */
+    --ink-soft:   #2c3150;   /* raised dark surfaces                */
+    --paper:      #f5f6fa;   /* page background                     */
+    --card:       #ffffff;
+    --line:       #e3e6ef;
+
+    --accent:     #4c6fff;   /* the learning path, primary actions  */
+    --accent-dim: #eaefff;
+
+    --gold:       #e9b44c;   /* GOLDEN ASSESSMENT ONLY              */
+    --gold-dim:   #fdf4e1;
+    --gold-deep:  #a9762a;
+
+    --jade:       #2bb673;   /* passed / completed                  */
+    --jade-dim:   #e6f7ef;
+    --coral:      #e05260;   /* needs revision                      */
+    --coral-dim:  #fdecee;
+
+    --muted:      #6b7089;
+
+    --radius:     14px;
+    --radius-sm:  9px;
+    --shadow:     0 1px 2px rgba(22, 25, 43, .06),
+                  0 8px 24px rgba(22, 25, 43, .06);
+
+    --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+    --font-body:    "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ---------------------------------------------------------------- */
+/* 2. Base                                                           */
+/* ---------------------------------------------------------------- */
+body {
+    background: var(--paper);
+    font-family: var(--font-body);
+    color: var(--ink);
+    font-size: 15px;
+}
+
+h1, h2, h3, h4, h5, .display-face {
+    font-family: var(--font-display);
+    letter-spacing: -.02em;
+    font-weight: 600;
+}
+
+/* Every figure on the site - scores, counts, percentages */
+.figure-mono, .stat-value, .score-value, .q-number {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum" 1;   /* digits keep the same width */
+}
+
+a { color: var(--accent); }
+
+.text-muted-2 { color: var(--muted) !important; }
+
+/* Visible keyboard focus everywhere - accessibility floor */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.topic-node:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ---------------------------------------------------------------- */
+/* 3. Application shell - dark rail on the left, content on paper    */
+/* ---------------------------------------------------------------- */
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 246px;
+    flex-shrink: 0;
+    background: var(--ink);
+    color: #c9cce0;
+    padding: 22px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.25;
+    margin-bottom: 26px;
+}
+
+.brand-mark {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: var(--accent);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.sidebar .nav-label {
+    font-size: 10.5px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: #6f748f;
+    margin: 18px 8px 7px;
+    font-weight: 600;
+}
+
+.sidebar a.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 11px;
+    border-radius: var(--radius-sm);
+    color: #c9cce0;
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 2px;
+    transition: background .15s ease, color .15s ease;
+}
+
+.sidebar a.nav-item:hover {
+    background: rgba(255, 255, 255, .07);
+    color: #fff;
+}
+
+.sidebar a.nav-item.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 500;
+}
+
+/* The one gold item in the navigation, when it is available */
+.sidebar a.nav-item.golden {
+    color: var(--gold);
+}
+.sidebar a.nav-item.golden:hover {
+    background: rgba(233, 180, 76, .14);
+}
+
+.sidebar .nav-icon {
+    width: 17px;
+    text-align: center;
+    opacity: .85;
+    font-size: 13px;
+}
+
+.sidebar-foot {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, .09);
+}
+
+.who {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--ink-soft);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.who-name  { color: #fff; font-size: 13.5px; font-weight: 500; line-height: 1.2; }
+.who-role  { color: #6f748f; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+
+.content {
+    flex: 1;
+    min-width: 0;                /* lets wide tables scroll, not stretch */
+    padding: 26px 30px 60px;
+}
+
+.page-head {
+    margin-bottom: 22px;
+}
+.page-head h1 {
+    font-size: 26px;
+    margin: 0 0 3px;
+}
+.page-head .sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0;
+}
+
+/* ---------------------------------------------------------------- */
+/* 4. Cards, stats and tables                                        */
+/* ---------------------------------------------------------------- */
+.card-soft {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.stat {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    height: 100%;
+}
+.stat-label {
+    font-size: 11px;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.stat-value {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--ink);
+}
+.stat-value small { font-size: 15px; color: var(--muted); font-weight: 500; }
+.stat.is-gold .stat-value { color: var(--gold-deep); }
+
+.table-wrap {
+    overflow-x: auto;            /* wide tables scroll, page never does */
+}
+.table-clean {
+    width: 100%;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.table-clean th {
+    font-size: 11px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+}
+.table-clean td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+    font-size: 14px;
+}
+.table-clean tbody tr:last-child td { border-bottom: 0; }
+.table-clean tbody tr:hover { background: #fafbff; }
+
+/* ---------------------------------------------------------------- */
+/* 5. Pills                                                          */
+/* ---------------------------------------------------------------- */
+.pill {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.pill-basic    { background: var(--accent-dim); color: #2c4bcc; }
+.pill-advanced { background: var(--gold-dim);   color: var(--gold-deep); }
+.pill-pass     { background: var(--jade-dim);   color: #1a7d4d; }
+.pill-fail     { background: var(--coral-dim);  color: #b3303c; }
+.pill-idle     { background: #eef0f6;           color: var(--muted); }
+.pill-gold     { background: var(--gold-dim);   color: var(--gold-deep); }
+
+/* ---------------------------------------------------------------- */
+/* 6. THE LEARNING PATH  (the signature element of the project)       */
+/*    A rail runs down the page and every topic is a node on it.     */
+/* ---------------------------------------------------------------- */
+.path {
+    position: relative;
+    padding-left: 46px;
+}
+
+/* the rail itself */
+.path::before {
+    content: "";
+    position: absolute;
+    left: 17px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: var(--line);
+}
+
+.path-step {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+/* the numbered node sitting on the rail */
+.path-node {
+    position: absolute;
+    left: -46px;
+    top: 18px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--line);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    z-index: 1;
+}
+.path-step.is-done    .path-node { border-color: var(--jade);   background: var(--jade);   color: #fff; }
+.path-step.is-current .path-node { border-color: var(--accent); background: var(--accent); color: #fff; }
+.path-step.is-mastered .path-node{ border-color: var(--gold);   background: var(--gold);   color: #fff; }
+.path-step.is-locked  .path-node { background: #f0f1f6; color: #a9adc2; }
+
+.topic-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+a.topic-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    border-color: #c8cee6;
+}
+.path-step.is-locked .topic-card {
+    background: #fbfbfd;
+    border-style: dashed;
+    opacity: .72;
+    cursor: not-allowed;
+}
+.path-step.is-mastered .topic-card { border-color: #f0dcae; }
+
+.topic-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 3px;
+}
+.topic-desc {
+    color: var(--muted);
+    font-size: 13.5px;
+    margin: 0;
+}
+
+/* The gate that sits on the rail between the basic and advanced half */
+.path-gate {
+    position: relative;
+    margin: 20px 0 20px;
+    padding: 13px 16px;
+    border-radius: var(--radius);
+    background: var(--gold-dim);
+    border: 1px dashed var(--gold);
+    color: var(--gold-deep);
+    font-size: 13.5px;
+}
+.path-gate strong { font-family: var(--font-display); }
+.path-gate::before {
+    content: "";
+    position: absolute;
+    left: -30px;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 4px var(--gold-dim);
+}
+
+/* ---------------------------------------------------------------- */
+/* 7. Golden Assessment surfaces                                     */
+/* ---------------------------------------------------------------- */
+.golden-banner {
+    background: linear-gradient(135deg, #2a2440 0%, #47391d 100%);
+    color: #f7e9c9;
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    border: 1px solid var(--gold);
+}
+.golden-banner h2 {
+    color: var(--gold);
+    font-size: 21px;
+    margin: 0 0 6px;
+}
+.golden-banner p { margin: 0; color: #ddd2b6; font-size: 14px; }
+
+.btn-gold {
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    color: #3a2a08;
+    font-weight: 600;
+}
+.btn-gold:hover { background: #dfa736; border-color: #dfa736; color: #3a2a08; }
+
+/* ---------------------------------------------------------------- */
+/* 8. Quiz                                                           */
+/* ---------------------------------------------------------------- */
+.quiz-progress {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--paper);
+    padding: 12px 0 14px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 20px;
+}
+.quiz-bar {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--line);
+    overflow: hidden;
+}
+.quiz-bar span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width .3s ease;
+}
+.quiz-bar.gold span { background: var(--gold); }
+
+.q-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 14px;
+}
+.q-card.answered { border-color: #c6d3ff; }
+.q-card.gold.answered { border-color: #f0dcae; }
+
+.q-number {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .1em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.q-text {
+    font-size: 15.5px;
+    font-weight: 500;
+    margin: 5px 0 14px;
+    line-height: 1.45;
+}
+
+/* Options are full width click targets, not tiny radio dots */
+.opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 10px 13px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color .13s ease, background .13s ease;
+}
+.opt:hover { border-color: #b9c4e8; background: #fafbff; }
+.opt input { margin-top: 3px; flex-shrink: 0; }
+.opt .letter {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    width: 15px;
+    flex-shrink: 0;
+}
+.opt.picked { border-color: var(--accent); background: var(--accent-dim); }
+.opt.picked .letter { color: var(--accent); }
+.q-card.gold .opt.picked { border-color: var(--gold); background: var(--gold-dim); }
+.q-card.gold .opt.picked .letter { color: var(--gold-deep); }
+
+/* ---------------------------------------------------------------- */
+/* 9. Result ring on the recommendation page                         */
+/* ---------------------------------------------------------------- */
+.score-ring {
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: conic-gradient(var(--ring-colour, var(--accent)) calc(var(--pct, 0) * 1%), var(--line) 0);
+    position: relative;
+}
+.score-ring::after {
+    content: "";
+    position: absolute;
+    inset: 11px;
+    background: var(--card);
+    border-radius: 50%;
+}
+.score-ring .score-value {
+    position: relative;
+    z-index: 1;
+    font-size: 30px;
+    font-weight: 600;
+}
+.score-ring .score-sub {
+    position: relative;
+    z-index: 1;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------------- */
+/* 10. Notes rendered from the topics.notes column                   */
+/* ---------------------------------------------------------------- */
+.notes h4 {
+    font-size: 15px;
+    margin: 22px 0 8px;
+    color: var(--ink);
+}
+.notes h4:first-child { margin-top: 0; }
+.notes p, .notes li { font-size: 14.5px; line-height: 1.65; color: #3a3f5c; }
+.notes ul { padding-left: 20px; }
+.notes code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    background: #eef0f6;
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: #2c3150;
+}
+.notes pre {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    background: var(--ink);
+    color: #d5d9ee;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    overflow-x: auto;
+    margin: 12px 0;
+}
+
+/* ---------------------------------------------------------------- */
+/* 11. Entry pages (index / login / register)                        */
+/* ---------------------------------------------------------------- */
+.entry {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+}
+.entry-art {
+    background: var(--ink);
+    color: #fff;
+    padding: 52px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.entry-art h1 {
+    font-size: 38px;
+    line-height: 1.12;
+    margin: 0 0 16px;
+}
+.entry-art p { color: #9ea3c0; font-size: 15px; max-width: 44ch; }
+
+.entry-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+}
+.entry-form .inner { width: 100%; max-width: 386px; }
+
+/* The rule engine drawn as a small diagram on the entry page */
+.rule-strip {
+    margin-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, .12);
+    padding-top: 20px;
+}
+.rule-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 0;
+    font-size: 13px;
+    color: #9ea3c0;
+}
+.rule-key {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, .08);
+    color: #cfd3e8;
+    flex-shrink: 0;
+    min-width: 74px;
+    text-align: center;
+}
+.rule-row.is-gold .rule-key { background: rgba(233, 180, 76, .16); color: var(--gold); }
+
+.form-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 5px;
+}
+.form-control, .form-select {
+    border-radius: var(--radius-sm);
+    border-color: #d7dbe9;
+    padding: 9px 12px;
+    font-size: 14.5px;
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    font-weight: 500;
+}
+.btn-primary:hover { background: #3d5ce0; border-color: #3d5ce0; }
+
+.btn { border-radius: var(--radius-sm); }
+
+/* role chooser on the login form */
+.role-pick { display: flex; gap: 8px; }
+.role-pick input { position: absolute; opacity: 0; pointer-events: none; }
+.role-pick label {
+    flex: 1;
+    text-align: center;
+    padding: 9px;
+    border: 1px solid #d7dbe9;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all .13s ease;
+}
+.role-pick input:checked + label {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    color: #2c4bcc;
+    font-weight: 600;
+}
+.role-pick input:focus-visible + label { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* ---------------------------------------------------------------- */
+/* 12. Responsive - the rail becomes a top bar on small screens      */
+/* ---------------------------------------------------------------- */
+@media (max-width: 900px) {
+    .entry { grid-template-columns: 1fr; }
+    .entry-art { padding: 34px 26px; }
+    .entry-art h1 { font-size: 29px; }
+}
+
+@media (max-width: 768px) {
+    .app { flex-direction: column; }
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 12px 16px;
+        gap: 6px;
+    }
+    .sidebar .brand { margin-bottom: 0; margin-right: auto; }
+    .sidebar .nav-label { display: none; }
+    .sidebar nav { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; }
+    .sidebar a.nav-item { padding: 7px 10px; font-size: 13px; }
+    .sidebar-foot {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .sidebar-foot .who { margin-bottom: 0; }
+    .content { padding: 18px 16px 46px; }
+    .path { padding-left: 38px; }
+    .path-node { left: -38px; width: 30px; height: 30px; font-size: 11px; }
+    .path::before { left: 14px; }
+    .path-gate::before { left: -27px; }
+}
+
+/* Anyone who asked their system for less motion gets none */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .001ms !important;
+        transition-duration: .001ms !important;
+    }
+    a.topic-card:hover { transform: none; }
+}

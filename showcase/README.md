@@ -1,7 +1,12 @@
 # Vercel showcase
 
-This folder is a static, interactive presentation of the full Java/JSP project. It mirrors the thresholds in `src/engine/RuleConstants.java` and the recommendation and unlock decisions in `src/engine/RecommendationEngine.java`. Simulated progress is stored in browser `localStorage` and can be reset.
+This folder contains two separate Vercel experiences:
 
-The full MVP lives in the repository root and runs on Tomcat with MySQL. This showcase has no accounts, actual question bank, server-side scoring, teacher tools, or shared database. Its purpose is to let an external reviewer explore the learning path and decision rules immediately, without installing the Java stack.
+1. `/` is the opening showcase with an interactive score simulator. It mirrors the thresholds in `src/engine/RuleConstants.java` and the decisions in `src/engine/RecommendationEngine.java`.
+2. `/product/` is an interactive browser version of the MVP product flow. Reviewers can enter as a student or teacher, read the actual seeded notes, practise with the actual questions, submit ten-question quizzes and five-question Golden Assessments, see recommendations and progress, and manage topics and questions.
+
+`build_data.py` exports eight topics and 200 questions from `database/02_seed_data.sql` and `database/03_advanced_practice.sql` into `product/data.json`. Run it after changing either SQL seed file.
+
+The full Java/JSP MVP lives in the repository root and runs on Tomcat with MySQL. The Vercel product demo is a browser implementation of its presentation flows and rules: role selection uses demo personas, scoring and teacher edits run in JavaScript, and attempts, recommendations and course edits stay in that visitor's `localStorage`. It has no real authentication, shared database or server-side scoring. The banner and entry screen disclose this clearly.
 
 Deploy this folder as the Vercel project root (`showcase/`). No build command or environment variables are required.
