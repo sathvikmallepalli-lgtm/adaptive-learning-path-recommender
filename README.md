@@ -2,7 +2,7 @@
 
 A rule-based Python learning course built for a Web Technologies PBL presentation. Students study eight topics, take quizzes, receive explainable next-step advice, and unlock advanced topics through Golden Assessments. Teachers manage the course and inspect attempts and recommendations.
 
-**Live showcase:** [adaptive-learning-path-showcase.vercel.app](https://adaptive-learning-path-showcase.vercel.app). Start with the project presentation and rule simulator, then open the separate [MVP product demo](https://adaptive-learning-path-showcase.vercel.app/product/) to use the student and teacher flows with the seeded course content.
+**Live showcase:** [adaptive-learning-path-showcase.vercel.app](https://adaptive-learning-path-showcase.vercel.app). Start with the project presentation and rule simulator, then open the separate [MVP product demo](https://adaptive-learning-path-showcase.vercel.app/product/). In the MVP, click **Play guided demo** to watch real quiz answers, recommendations, the advanced topic unlock, and the teacher's attempt history. You can also explore the student and teacher flows yourself.
 
 **This repository contains the complete source code and project report.** The Vercel experiences live in [`showcase/`](showcase/). The product demo uses real seeded questions but runs entirely in the visitor's browser. Its role selector is for demonstration, and its attempts and teacher edits stay on that device. The complete Java/JSP/MySQL MVP still runs locally with Tomcat.
 

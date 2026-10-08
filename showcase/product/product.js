@@ -4,6 +4,9 @@ const app = document.getElementById("app");
 let seed;
 let state;
 let feedback = "";
+let tour = null;
+const tourOverlay = document.getElementById("tour-overlay");
+const playGuidedButton = document.getElementById("play-guided-demo");
 
 const esc = (value) =>
   String(value ?? "").replace(
@@ -79,6 +82,7 @@ const goto = (path) => {
   window.scrollTo(0, 0);
 };
 const save = () => {
+  if (tour?.active) return;
   try {
     localStorage.setItem(storeKey, JSON.stringify(state));
   } catch (_) {
@@ -220,12 +224,12 @@ function page(title, subtitle, body, active) {
           .split(" ")
           .map((part) => part[0])
           .join("")
-  }</div><div><div class="who-name">${esc(name)}</div><div class="who-role">${teacher ? "Teacher" : "Student"}</div></div></div><button class="nav-item" data-action="logout"><span class="nav-icon">↩</span> Switch account</button><button class="reset-link" data-action="reset">Reset browser demo</button></div></aside><main class="content" id="main"><div class="page-head"><h1>${title}</h1><p class="sub">${subtitle}</p></div>${feedback ? `<div class="demo-alert error" role="alert">${esc(feedback)}</div>` : ""}${body}</main></div>`;
+  }</div><div><div class="who-name">${esc(name)}</div><div class="who-role">${teacher ? "Teacher" : "Student"}</div></div></div><button class="nav-item" data-action="logout"><span class="nav-icon">↩</span> Switch account</button><button class="reset-link" data-action="start-tour">▶ Play guided demo</button><button class="reset-link" data-action="reset">Reset browser demo</button></div></aside><main class="content" id="main"><div class="page-head"><h1>${title}</h1><p class="sub">${subtitle}</p></div>${feedback ? `<div class="demo-alert error" role="alert">${esc(feedback)}</div>` : ""}${body}</main></div>`;
   document.title = `${title.replace(/<[^>]+>/g, "")} | MVP Product Demo`;
 }
 
 function chooseAccount() {
-  app.innerHTML = `<main class="demo-entry" id="main"><section class="demo-intro"><div class="brand"><span class="brand-mark">A</span><span>Adaptive<br>Learning</span></div><h1>Learn Python on a path that reacts to your quiz score.</h1><p>This is the working product flow: read real course notes, answer the seeded questions, get a recommendation, and watch the next module unlock.</p><div class="demo-rule"><b>Below 50%</b><span>Revise and retake</span></div><div class="demo-rule"><b>50–80%</b><span>Continue along the path</span></div><div class="demo-rule"><b>Above 80%</b><span>Take the Golden Assessment</span></div><div class="demo-rule"><b>Golden pass</b><span>Unlock an advanced topic</span></div></section><section class="demo-choose"><h2>Enter the demo</h2><p>Choose a seeded role. Rahul has sample progress; Sneha starts fresh. The teacher view shows the course and student activity.</p><button class="account-card" data-action="login" data-user="rahul"><span class="avatar">RS</span><span><strong>Rahul Sharma</strong><small>Student · sample progress and revision advice</small></span><span class="arrow">↗</span></button><button class="account-card" data-action="login" data-user="sneha"><span class="avatar">SP</span><span><strong>Sneha Patil</strong><small>Student · start from Variables</small></span><span class="arrow">↗</span></button><button class="account-card teacher" data-action="login" data-user="teacher"><span class="avatar">AR</span><span><strong>Anita Rao</strong><small>Teacher · course and student activity</small></span><span class="arrow">↗</span></button><p class="demo-footnote">No passwords or real accounts are used here. This browser copy saves changes only on your device. The Java/Tomcat/MySQL application is available in the repository.</p></section></main>`;
+  app.innerHTML = `<main class="demo-entry" id="main"><section class="demo-intro"><div class="brand"><span class="brand-mark">A</span><span>Adaptive<br>Learning</span></div><h1>Learn Python on a path that reacts to your quiz score.</h1><p>This is the working product flow: read real course notes, answer the seeded questions, get a recommendation, and watch the next module unlock.</p><div class="demo-rule"><b>Below 50%</b><span>Revise and retake</span></div><div class="demo-rule"><b>50–80%</b><span>Continue along the path</span></div><div class="demo-rule"><b>Above 80%</b><span>Take the Golden Assessment</span></div><div class="demo-rule"><b>Golden pass</b><span>Unlock an advanced topic</span></div></section><section class="demo-choose"><h2>Enter the demo</h2><p>Watch the app answer a quiz and Golden Assessment automatically, or explore either role yourself.</p><button class="account-card tour-card" data-action="start-tour"><span class="avatar">▶</span><span><strong>Play the guided demo</strong><small>One click · answers, recommendations, unlock and teacher view</small></span><span class="arrow">↗</span></button><button class="account-card" data-action="login" data-user="rahul"><span class="avatar">RS</span><span><strong>Rahul Sharma</strong><small>Student · sample progress and revision advice</small></span><span class="arrow">↗</span></button><button class="account-card" data-action="login" data-user="sneha"><span class="avatar">SP</span><span><strong>Sneha Patil</strong><small>Student · start from Variables</small></span><span class="arrow">↗</span></button><button class="account-card teacher" data-action="login" data-user="teacher"><span class="avatar">AR</span><span><strong>Anita Rao</strong><small>Teacher · course and student activity</small></span><span class="arrow">↗</span></button><p class="demo-footnote">No passwords or real accounts are used here. This browser copy saves changes only on your device. The Java/Tomcat/MySQL application is available in the repository.</p></section></main>`;
   document.title = "Enter the MVP Product Demo | Adaptive Learning";
 }
 
@@ -619,11 +623,242 @@ function render() {
   }
 }
 
+const tourSteps = 9;
+
+function showTourStep(number, title, description) {
+  if (!tour?.active) return;
+  tour.step = number;
+  tour.title = title;
+  tour.description = description;
+  tour.fast = false;
+  renderTourOverlay();
+}
+
+function renderTourOverlay() {
+  if (!tour?.active) {
+    tourOverlay.hidden = true;
+    playGuidedButton.disabled = false;
+    return;
+  }
+  tourOverlay.hidden = false;
+  playGuidedButton.disabled = true;
+  playGuidedButton.textContent = "▶ Guided demo playing";
+  tourOverlay.innerHTML = `<div class="tour-topline"><span>Automatic product walkthrough</span><span>${tour.step} / ${tourSteps}</span></div><div class="tour-progress"><span style="width:${Math.round((tour.step / tourSteps) * 100)}%"></span></div><h2>${esc(tour.title)}</h2><p>${esc(tour.description)}</p><div class="tour-controls">${tour.finished ? `<button type="button" data-tour-control="replay">↺ Replay</button>` : `<button type="button" data-tour-control="pause">${tour.paused ? "▶ Resume" : "Ⅱ Pause"}</button><button type="button" data-tour-control="next">Next step</button>`}<button type="button" data-tour-control="exit">Exit demo</button></div>`;
+}
+
+function endGuidedDemo() {
+  if (!tour) return;
+  const previous = tour;
+  previous.cancelled = true;
+  tour = null;
+  state = previous.originalState;
+  feedback = "";
+  location.hash = previous.originalHash;
+  render();
+  renderTourOverlay();
+  playGuidedButton.textContent = "▶ Play guided demo";
+  window.scrollTo(0, 0);
+}
+
+async function tourDelay(milliseconds, currentTour) {
+  let remaining = milliseconds;
+  while (remaining > 0) {
+    if (tour !== currentTour || currentTour.cancelled)
+      throw new Error("Tour stopped");
+    await new Promise((resolve) => setTimeout(resolve, 80));
+    if (currentTour.paused) continue;
+    if (currentTour.fast) return;
+    remaining -= 80;
+  }
+}
+
+function tourNavigate(path, currentTour) {
+  if (tour !== currentTour || currentTour.cancelled)
+    throw new Error("Tour stopped");
+  goto(path);
+}
+
+async function tourAnswer(type, topicId, numberCorrect, currentTour) {
+  const questions = questionsFor(topicId, type).slice(
+    0,
+    type === "GOLDEN" ? 5 : 10,
+  );
+  if (questions.length !== (type === "GOLDEN" ? 5 : 10))
+    throw new Error("The question set is incomplete");
+  for (const [index, question] of questions.entries()) {
+    await tourDelay(index === 0 ? 500 : 440, currentTour);
+    const correctIndex = "ABCD".indexOf(question.correct);
+    const letter =
+      index < numberCorrect ? question.correct : "ABCD"[(correctIndex + 1) % 4];
+    const input = document.querySelector(
+      `.quiz-form input[name="q${question.id}"][value="${letter}"]`,
+    );
+    if (!input)
+      throw new Error("The assessment changed during the walkthrough");
+    input.click();
+    input
+      .closest(".q-card")
+      ?.scrollIntoView({
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "center",
+      });
+  }
+  await tourDelay(1500, currentTour);
+  const form = document.querySelector(".quiz-form");
+  if (!form) throw new Error("The assessment is no longer open");
+  form.requestSubmit();
+}
+
+async function runGuidedDemo(currentTour) {
+  try {
+    showTourStep(
+      1,
+      "Rahul needs revision",
+      "His Functions quiz is at 40%. The dashboard points him back to the topic before he can move forward.",
+    );
+    await tourDelay(3800, currentTour);
+
+    tourNavigate("topic/4", currentTour);
+    showTourStep(
+      2,
+      "Real course notes and practice",
+      "The topic page contains the seeded Python notes and practice questions. Next, the app will retake Rahul's quiz.",
+    );
+    await tourDelay(4200, currentTour);
+
+    tourNavigate("quiz/4", currentTour);
+    showTourStep(
+      3,
+      "The quiz answers itself",
+      "Watch the ten real questions being answered. Nine correct answers will produce a 90% result.",
+    );
+    await tourDelay(1700, currentTour);
+    await tourAnswer("QUIZ", 4, 9, currentTour);
+
+    showTourStep(
+      4,
+      "A rule explains the next step",
+      "The 90% quiz score opens the Golden Assessment, but OOP is still locked until Rahul passes it.",
+    );
+    await tourDelay(5100, currentTour);
+
+    tourNavigate("golden/4", currentTour);
+    showTourStep(
+      5,
+      "Golden Assessment",
+      "The app now answers five harder questions. Three correct answers meet the 60% passing threshold.",
+    );
+    await tourDelay(1600, currentTour);
+    await tourAnswer("GOLDEN", 4, 3, currentTour);
+
+    showTourStep(
+      6,
+      "OOP is unlocked",
+      "The 3 out of 5 Golden pass updates Rahul's recommendation and opens the advanced OOP topic.",
+    );
+    await tourDelay(5000, currentTour);
+
+    tourNavigate("topic/5", currentTour);
+    showTourStep(
+      7,
+      "The advanced path opens",
+      "Rahul can now read OOP notes and take its quiz. His earlier Functions attempts remain in his progress history.",
+    );
+    await tourDelay(4500, currentTour);
+
+    state.user = "teacher";
+    tourNavigate("dashboard", currentTour);
+    showTourStep(
+      8,
+      "Teacher view",
+      "Anita can see both student activity and the new quiz and Golden attempts from this walkthrough.",
+    );
+    await tourDelay(4700, currentTour);
+
+    tourNavigate("attempts", currentTour);
+    showTourStep(
+      9,
+      "Demo complete",
+      "The teacher's attempt history shows Rahul's quiz and Golden scores. Replay the walkthrough or exit to restore your previous browser progress.",
+    );
+    currentTour.finished = true;
+    renderTourOverlay();
+  } catch (error) {
+    if (tour !== currentTour || currentTour.cancelled) return;
+    currentTour.finished = true;
+    showTourStep(
+      currentTour.step || 1,
+      "Walkthrough stopped",
+      `The automatic walkthrough could not continue: ${error.message}. Exit to return to your previous progress.`,
+    );
+    renderTourOverlay();
+  }
+}
+
+function startGuidedDemo() {
+  if (!seed || !state) return;
+  const originalState = tour?.originalState || state;
+  const originalHash = tour?.originalHash ?? location.hash;
+  if (tour) tour.cancelled = true;
+  tour = {
+    active: true,
+    paused: false,
+    cancelled: false,
+    finished: false,
+    fast: false,
+    step: 1,
+    title: "Starting walkthrough",
+    description: "Preparing sample student progress.",
+    originalState,
+    originalHash,
+  };
+  state = freshState();
+  state.user = "rahul";
+  goto("dashboard");
+  renderTourOverlay();
+  runGuidedDemo(tour);
+}
+
+playGuidedButton.addEventListener("click", startGuidedDemo);
+tourOverlay.addEventListener("click", (event) => {
+  const control = event.target.closest("[data-tour-control]");
+  if (!control || !tour) return;
+  if (control.dataset.tourControl === "exit") endGuidedDemo();
+  else if (control.dataset.tourControl === "replay") startGuidedDemo();
+  else if (control.dataset.tourControl === "pause") {
+    tour.paused = !tour.paused;
+    renderTourOverlay();
+  } else if (control.dataset.tourControl === "next") {
+    tour.paused = false;
+    tour.fast = true;
+    renderTourOverlay();
+  }
+});
+
+document.addEventListener(
+  "click",
+  (event) => {
+    if (
+      !tour?.active ||
+      !event.isTrusted ||
+      event.target.closest("#tour-overlay, #play-guided-demo")
+    )
+      return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  },
+  true,
+);
+
 document.addEventListener("click", (event) => {
   const control = event.target.closest("[data-action]");
   if (!control || !state) return;
   const action = control.dataset.action;
-  if (action === "login") {
+  if (action === "start-tour") {
+    startGuidedDemo();
+  } else if (action === "login") {
     state.user = control.dataset.user;
     save();
     goto("dashboard");
