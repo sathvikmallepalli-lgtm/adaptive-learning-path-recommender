@@ -229,7 +229,7 @@ function page(title, subtitle, body, active) {
 }
 
 function chooseAccount() {
-  app.innerHTML = `<main class="demo-entry" id="main"><section class="demo-intro"><div class="brand"><span class="brand-mark">A</span><span>Adaptive<br>Learning</span></div><h1>Learn Python on a path that reacts to your quiz score.</h1><p>This is the working product flow: read real course notes, answer the seeded questions, get a recommendation, and watch the next module unlock.</p><div class="demo-rule"><b>Below 50%</b><span>Revise and retake</span></div><div class="demo-rule"><b>50–80%</b><span>Continue along the path</span></div><div class="demo-rule"><b>Above 80%</b><span>Take the Golden Assessment</span></div><div class="demo-rule"><b>Golden pass</b><span>Unlock an advanced topic</span></div></section><section class="demo-choose"><h2>Enter the demo</h2><p>Watch the app answer a quiz and Golden Assessment automatically, or explore either role yourself.</p><button class="account-card tour-card" data-action="start-tour"><span class="avatar">▶</span><span><strong>Play the guided demo</strong><small>One click · answers, recommendations, unlock and teacher view</small></span><span class="arrow">↗</span></button><button class="account-card" data-action="login" data-user="rahul"><span class="avatar">RS</span><span><strong>Rahul Sharma</strong><small>Student · sample progress and revision advice</small></span><span class="arrow">↗</span></button><button class="account-card" data-action="login" data-user="sneha"><span class="avatar">SP</span><span><strong>Sneha Patil</strong><small>Student · start from Variables</small></span><span class="arrow">↗</span></button><button class="account-card teacher" data-action="login" data-user="teacher"><span class="avatar">AR</span><span><strong>Anita Rao</strong><small>Teacher · course and student activity</small></span><span class="arrow">↗</span></button><p class="demo-footnote">No passwords or real accounts are used here. This browser copy saves changes only on your device. The Java/Tomcat/MySQL application is available in the repository.</p></section></main>`;
+  app.innerHTML = `<main class="demo-entry" id="main"><section class="demo-intro"><div class="brand"><span class="brand-mark">A</span><span>Adaptive<br>Learning</span></div><h1>Learn Python on a path that reacts to your quiz score.</h1><p>This is the working product flow: read real course notes, answer the seeded questions, get a recommendation, and watch the next module unlock.</p><div class="demo-rule"><b>Below 50%</b><span>Revise and retake</span></div><div class="demo-rule"><b>50–80%</b><span>Continue along the path</span></div><div class="demo-rule"><b>Above 80%</b><span>Take the Golden Assessment</span></div><div class="demo-rule"><b>Golden pass</b><span>Unlock an advanced topic</span></div></section><section class="demo-choose"><h2>Enter the demo</h2><p>Watch every score outcome in under a minute, or explore either role yourself.</p><button class="account-card tour-card" data-action="start-tour"><span class="avatar">▶</span><span><strong>Play the guided demo</strong><small>Under 1 minute · all score outcomes and teacher view</small></span><span class="arrow">↗</span></button><button class="account-card" data-action="login" data-user="rahul"><span class="avatar">RS</span><span><strong>Rahul Sharma</strong><small>Student · sample progress and revision advice</small></span><span class="arrow">↗</span></button><button class="account-card" data-action="login" data-user="sneha"><span class="avatar">SP</span><span><strong>Sneha Patil</strong><small>Student · start from Variables</small></span><span class="arrow">↗</span></button><button class="account-card teacher" data-action="login" data-user="teacher"><span class="avatar">AR</span><span><strong>Anita Rao</strong><small>Teacher · course and student activity</small></span><span class="arrow">↗</span></button><p class="demo-footnote">No passwords or real accounts are used here. This browser copy saves changes only on your device. The Java/Tomcat/MySQL application is available in the repository.</p></section></main>`;
   document.title = "Enter the MVP Product Demo | Adaptive Learning";
 }
 
@@ -623,7 +623,7 @@ function render() {
   }
 }
 
-const tourSteps = 9;
+const tourSteps = 14;
 
 function showTourStep(number, title, description) {
   if (!tour?.active) return;
@@ -643,7 +643,7 @@ function renderTourOverlay() {
   tourOverlay.hidden = false;
   playGuidedButton.disabled = true;
   playGuidedButton.textContent = "▶ Guided demo playing";
-  tourOverlay.innerHTML = `<div class="tour-topline"><span>Automatic product walkthrough</span><span>${tour.step} / ${tourSteps}</span></div><div class="tour-progress"><span style="width:${Math.round((tour.step / tourSteps) * 100)}%"></span></div><h2>${esc(tour.title)}</h2><p>${esc(tour.description)}</p><div class="tour-controls">${tour.finished ? `<button type="button" data-tour-control="replay">↺ Replay</button>` : `<button type="button" data-tour-control="pause">${tour.paused ? "▶ Resume" : "Ⅱ Pause"}</button><button type="button" data-tour-control="next">Next step</button>`}<button type="button" data-tour-control="exit">Exit demo</button></div>`;
+  tourOverlay.innerHTML = `<div class="tour-topline"><span>All outcomes · under 1 minute</span><span>${tour.step} / ${tourSteps}</span></div><div class="tour-progress"><span style="width:${Math.round((tour.step / tourSteps) * 100)}%"></span></div><h2>${esc(tour.title)}</h2><p>${esc(tour.description)}</p><div class="tour-controls">${tour.finished ? `<button type="button" data-tour-control="replay">↺ Replay</button>` : `<button type="button" data-tour-control="pause">${tour.paused ? "▶ Resume" : "Ⅱ Pause"}</button><button type="button" data-tour-control="next">Next step</button>`}<button type="button" data-tour-control="exit">Exit demo</button></div>`;
 }
 
 function endGuidedDemo() {
@@ -686,7 +686,7 @@ async function tourAnswer(type, topicId, numberCorrect, currentTour) {
   if (questions.length !== (type === "GOLDEN" ? 5 : 10))
     throw new Error("The question set is incomplete");
   for (const [index, question] of questions.entries()) {
-    await tourDelay(index === 0 ? 500 : 440, currentTour);
+    await tourDelay(index === 0 ? 300 : 200, currentTour);
     const correctIndex = "ABCD".indexOf(question.correct);
     const letter =
       index < numberCorrect ? question.correct : "ABCD"[(correctIndex + 1) % 4];
@@ -696,16 +696,14 @@ async function tourAnswer(type, topicId, numberCorrect, currentTour) {
     if (!input)
       throw new Error("The assessment changed during the walkthrough");
     input.click();
-    input
-      .closest(".q-card")
-      ?.scrollIntoView({
-        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "auto"
-          : "smooth",
-        block: "center",
-      });
+    input.closest(".q-card")?.scrollIntoView({
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+      block: "center",
+    });
   }
-  await tourDelay(1500, currentTour);
+  await tourDelay(300, currentTour);
   const form = document.querySelector(".quiz-form");
   if (!form) throw new Error("The assessment is no longer open");
   form.requestSubmit();
@@ -715,73 +713,113 @@ async function runGuidedDemo(currentTour) {
   try {
     showTourStep(
       1,
-      "Rahul needs revision",
-      "His Functions quiz is at 40%. The dashboard points him back to the topic before he can move forward.",
+      "Start: revision needed",
+      "Rahul's Functions result is 40%. The learning path recommends revision; his earlier 70% Conditions result allowed him to continue.",
     );
-    await tourDelay(3800, currentTour);
-
-    tourNavigate("topic/4", currentTour);
-    showTourStep(
-      2,
-      "Real course notes and practice",
-      "The topic page contains the seeded Python notes and practice questions. Next, the app will retake Rahul's quiz.",
-    );
-    await tourDelay(4200, currentTour);
+    await tourDelay(2500, currentTour);
 
     tourNavigate("quiz/4", currentTour);
     showTourStep(
-      3,
-      "The quiz answers itself",
-      "Watch the ten real questions being answered. Nine correct answers will produce a 90% result.",
+      2,
+      "Below 50% · answer ten questions",
+      "The app answers the real Functions quiz with four correct answers. This will trigger revise and retake advice.",
     );
-    await tourDelay(1700, currentTour);
+    await tourDelay(450, currentTour);
+    await tourAnswer("QUIZ", 4, 4, currentTour);
+
+    showTourStep(
+      3,
+      "40% · revise and retake",
+      "The recommendation explains that Rahul must review Functions and retry before progressing.",
+    );
+    await tourDelay(2600, currentTour);
+
+    tourNavigate("quiz/4", currentTour);
+    showTourStep(
+      4,
+      "50–80% · try a passing score",
+      "Seven correct answers will give Rahul 70%: enough to pass the topic quiz, but not enough to open Golden.",
+    );
+    await tourDelay(400, currentTour);
+    await tourAnswer("QUIZ", 4, 7, currentTour);
+
+    showTourStep(
+      5,
+      "70% · one more step for OOP",
+      "Because OOP is advanced, a 70% Functions quiz pass is not enough. Rahul needs above 80% and a Golden pass.",
+    );
+    await tourDelay(2800, currentTour);
+
+    tourNavigate("quiz/4", currentTour);
+    showTourStep(
+      6,
+      "Above 80% · earn Golden",
+      "Nine correct answers will give Rahul 90% and make the Golden Assessment available.",
+    );
+    await tourDelay(400, currentTour);
     await tourAnswer("QUIZ", 4, 9, currentTour);
 
     showTourStep(
-      4,
-      "A rule explains the next step",
-      "The 90% quiz score opens the Golden Assessment, but OOP is still locked until Rahul passes it.",
+      7,
+      "90% · Golden opens",
+      "The rule unlocks the Golden Assessment. OOP stays locked until Rahul passes Golden.",
     );
-    await tourDelay(5100, currentTour);
+    await tourDelay(2800, currentTour);
 
     tourNavigate("golden/4", currentTour);
     showTourStep(
-      5,
-      "Golden Assessment",
-      "The app now answers five harder questions. Three correct answers meet the 60% passing threshold.",
+      8,
+      "Golden below 60% · retry",
+      "Two correct answers out of five will give Rahul 40% and lead to advanced practice.",
     );
-    await tourDelay(1600, currentTour);
+    await tourDelay(400, currentTour);
+    await tourAnswer("GOLDEN", 4, 2, currentTour);
+
+    showTourStep(
+      9,
+      "40% Golden · advanced practice",
+      "The failed Golden result recommends harder practice questions and a retry. OOP remains locked.",
+    );
+    await tourDelay(2700, currentTour);
+
+    tourNavigate("golden/4", currentTour);
+    showTourStep(
+      10,
+      "Golden 60% · pass",
+      "The app answers Golden again. Three correct answers out of five meet the 60% pass mark.",
+    );
+    await tourDelay(400, currentTour);
     await tourAnswer("GOLDEN", 4, 3, currentTour);
 
     showTourStep(
-      6,
-      "OOP is unlocked",
-      "The 3 out of 5 Golden pass updates Rahul's recommendation and opens the advanced OOP topic.",
+      11,
+      "60% Golden · OOP unlocked",
+      "The new recommendation confirms the Golden pass and unlocks the advanced OOP topic.",
     );
-    await tourDelay(5000, currentTour);
+    await tourDelay(2800, currentTour);
 
     tourNavigate("topic/5", currentTour);
     showTourStep(
-      7,
-      "The advanced path opens",
-      "Rahul can now read OOP notes and take its quiz. His earlier Functions attempts remain in his progress history.",
+      12,
+      "Advanced learning path",
+      "Rahul can now read OOP notes, practise, and start the next quiz.",
     );
-    await tourDelay(4500, currentTour);
+    await tourDelay(2800, currentTour);
 
     state.user = "teacher";
-    tourNavigate("dashboard", currentTour);
+    tourNavigate("recommendations", currentTour);
     showTourStep(
-      8,
-      "Teacher view",
-      "Anita can see both student activity and the new quiz and Golden attempts from this walkthrough.",
+      13,
+      "Teacher view · every decision",
+      "Anita can compare the revision, quiz pass, Golden eligibility, retry, and advanced unlock recommendations in one list.",
     );
-    await tourDelay(4700, currentTour);
+    await tourDelay(2700, currentTour);
 
     tourNavigate("attempts", currentTour);
     showTourStep(
-      9,
-      "Demo complete",
-      "The teacher's attempt history shows Rahul's quiz and Golden scores. Replay the walkthrough or exit to restore your previous browser progress.",
+      14,
+      "Teacher view · all outcomes",
+      "Anita's history shows every quiz and Golden attempt. Replay or exit to restore your previous browser progress.",
     );
     currentTour.finished = true;
     renderTourOverlay();
